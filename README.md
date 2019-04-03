@@ -1,4 +1,4 @@
-# mytest-hook
+# react-rxjs-hook
 
 > 
 
