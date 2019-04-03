@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install --save mytest-hook react-rxjs rxjs
+npm install --save react-rxjs-hook react-rxjs rxjs
 ```
 
 ## Usage
