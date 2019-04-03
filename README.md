@@ -18,7 +18,7 @@ import React from 'react'
 import { merge, Subject} from "rxjs";
 import { map } from "rxjs/operators";
 import { createStore } from 'react-rxjs';
-import { useStore } from 'mytest-hook'
+import { useStore } from 'react-rxjs-hook'
 
 const inc$ = new Subject();
 const dec$ = new Subject();
