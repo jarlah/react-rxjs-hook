@@ -5,10 +5,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "mytest-hook": "file:..",
     "react": "file:../node_modules/react",
     "react-dom": "^16.8.0",
+    "react-rxjs": "file:../node_modules/react-rxjs",
     "react-scripts": "^2.1.3",
-    "mytest-hook": "file:.."
+    "rxjs": "file:../node_modules/rxjs"
   },
   "scripts": {
     "start": "react-scripts start",

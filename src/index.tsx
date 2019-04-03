@@ -1,23 +1,36 @@
 import * as React from 'react';
+import {Store, DevToolsInstance, getExtension, isRelevant} from "react-rxjs";
+import {tap} from "rxjs/operators";
 
-export const useMyHook = () => {
-  let [{
-    counter
-  }, setState] = React.useState<{
-    counter: number;
-  }>({
-    counter: 0
-  });
-
+export function useStore<StoreProps>(store: Store<StoreProps, StoreProps>,
+                                     initialProps: StoreProps) {
+  const [state, setState] = React.useState<StoreProps>(initialProps);
   React.useEffect(() => {
-    let interval = window.setInterval(() => {
-      counter++;
-      setState({counter})
-    }, 1000)
+    let devToolsInstance: DevToolsInstance
+    let devToolsSubscription: () => void;
+    let devToolsExtension = getExtension()
+    if (devToolsExtension) {
+      devToolsInstance = devToolsExtension.connect()
+      devToolsSubscription = devToolsInstance.subscribe(message => {
+        if (isRelevant(message)) {
+          setState(JSON.parse(message.state))
+        }
+      })
+    }
+    const observable = typeof store !== "function" ? store : store(initialProps);
+    const subscription = observable
+      .pipe(tap(setState), tap(state => {
+        if (devToolsInstance) {
+          devToolsInstance.send("update", state);
+        }
+      }))
+      .subscribe()
     return () => {
-      window.clearInterval(interval);
+      if (devToolsSubscription) {
+        devToolsSubscription()
+      }
+      subscription.unsubscribe();
     };
   }, []);
-
-  return counter;
-};
+  return state;
+}
