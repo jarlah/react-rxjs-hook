@@ -7,21 +7,36 @@
 ## Install
 
 ```bash
-npm install --save mytest-hook
+npm install --save mytest-hook react-rxjs rxjs
 ```
 
 ## Usage
 
 ```tsx
-import * as React from 'react'
+import React from 'react'
 
-import { useMyHook } from 'mytest-hook'
+import { merge, Subject} from "rxjs";
+import { map } from "rxjs/operators";
+import { createStore } from 'react-rxjs';
+import { useStore } from 'mytest-hook'
 
-const Example = () => {
-  const example = useMyHook()
+const inc$ = new Subject();
+const dec$ = new Subject();
+
+const reducer$ = merge(
+    inc$.pipe(map(() => (state) => state + 1)),
+    dec$.pipe(map(() => (state) => state - 1))
+);
+
+const store$ = createStore("test", reducer$, 0);
+
+const Counter = () => {
+  const state = useStore(store$);
   return (
     <div>
-      {example}
+      {state}
+      <button onClick={() => inc$.next()}>+</button>
+      <button onClick={() => dec$.next()}>-</button>
     </div>
   )
 }

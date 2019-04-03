@@ -19,7 +19,9 @@ const App = () => {
   const state = useStore(store$);
   return (
     <div>
-      {state}<button onClick={() => inc$.next()}>+</button><button onClick={() => dec$.next()}>-</button>
+      {state}
+      <button onClick={() => inc$.next()}>+</button>
+      <button onClick={() => dec$.next()}>-</button>
     </div>
   )
 }
